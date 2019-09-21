@@ -42,7 +42,7 @@ public class ShoppingCartController {
 	public String saleCode(@RequestParam("saleCode") String saleCode, Model model) {
 		List<Product> listProduct= new ArrayList<Product>();
 		listProduct=shoppingCartDAO.getListProductSale(saleCode);
-		System.out.println(listProduct.size());
+		
 		return "";
 	}
 	
