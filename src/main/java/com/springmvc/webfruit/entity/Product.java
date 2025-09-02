@@ -68,10 +68,8 @@ public class Product {
 	 
 	 
 	 
-	 @ManyToOne
-	  @JoinColumn(name = "shoppingCartId", nullable = false)
-	 //@Fetch(FetchMode.JOIN)
-	  private ShoppingCart shoppingCart;
+	 @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	  private Set<CartItem> cartItems = new HashSet<CartItem>();
 	 
 	 
 	 

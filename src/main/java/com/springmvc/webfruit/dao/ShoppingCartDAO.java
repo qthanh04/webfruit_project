@@ -48,6 +48,11 @@ public class ShoppingCartDAO implements IShoppingCartDAO {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public ShoppingCart getShoppingCartById(Integer id) {
+		return (ShoppingCart) sessionFactory.getCurrentSession().get(ShoppingCart.class, id);
+	}
 
 	@Override
 	public List<ShoppingCart> getList() {

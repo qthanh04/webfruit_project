@@ -20,7 +20,6 @@ public interface IShoppingCartService {
 	List<ShoppingCart> getList();
 	
 	public List<Product> getListProductSale(String saleCode);
-	  
 	
-
+	public ShoppingCart getShoppingCartByUserId(Integer userId);
 }

@@ -84,7 +84,7 @@
 
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+					<li class="nav-item"><a href="${pageContext.request.contextPath}/" class="nav-link">Home</a></li>
 					<li class="nav-item active dropdown"><a
 						class="nav-link dropdown-toggle" href="#" id="dropdown04"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
@@ -98,8 +98,9 @@
 					<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
 					<li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
 					<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-					<li class="nav-item cta cta-colored"><a href="cart.html"
-						class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+					<li class="nav-item"><a href="${pageContext.request.contextPath}/login" class="nav-link">Login</a></li>
+					<li class="nav-item cta cta-colored"><a href="${pageContext.request.contextPath}/cart/view"
+						class="nav-link"><span class="icon-shopping_cart"></span>[<span id="cart-count">0</span>]</a></li>
 
 				</ul>
 			</div>
@@ -114,7 +115,7 @@
 				class="row no-gutters slider-text align-items-center justify-content-center">
 				<div class="col-md-9 ftco-animate text-center">
 					<p class="breadcrumbs">
-						<span class="mr-2"><a href="index.html">Home</a></span> <span>Products</span>
+						<span class="mr-2"><a href="${pageContext.request.contextPath}/">Home</a></span> <span>Products</span>
 					</p>
 					<h1 class="mb-0 bread">Products</h1>
 				</div>
@@ -158,13 +159,15 @@
 								</div>
 								<div class="bottom-area d-flex px-3">
 									<div class="m-auto d-flex">
-										<a href="#"
+										<a href="<c:url value="/${product.id}" />"
 											class="add-to-cart d-flex justify-content-center align-items-center text-center">
 											<span><i class="ion-ios-menu"></i></span>
-										</a> <a href="#"
+										</a> 
+										<a href="#" onclick="addToCart(${product.id}, 1)"
 											class="buy-now d-flex justify-content-center align-items-center mx-1">
 											<span><i class="ion-ios-cart"></i></span>
-										</a> <a href="#"
+										</a> 
+										<a href="#"
 											class="heart d-flex justify-content-center align-items-center ">
 											<span><i class="ion-ios-heart"></i></span>
 										</a>
@@ -340,5 +343,38 @@
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
 	<script src="resources/js/google-map.js"></script>
 	<script src="resources/js/main.js"></script>
+	
+	<script>
+	function addToCart(productId, quantity) {
+		$.ajax({
+			url: '${pageContext.request.contextPath}/cart/add',
+			type: 'POST',
+			data: {
+				productId: productId,
+				quantity: quantity
+			},
+			success: function(response) {
+				const result = JSON.parse(response);
+				if (result.success) {
+					alert('Product added to cart successfully!');
+					// Update cart count in header
+					updateCartCount();
+				} else {
+					alert(result.message);
+				}
+			},
+			error: function() {
+				alert('Error adding product to cart');
+			}
+		});
+	}
+	
+	function updateCartCount() {
+		// This would typically fetch the current cart count from the server
+		// For now, we'll just increment the displayed count
+		var currentCount = parseInt($('#cart-count').text()) || 0;
+		$('#cart-count').text(currentCount + 1);
+	}
+	</script>
 </body>
 </html>

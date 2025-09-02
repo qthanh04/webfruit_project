@@ -22,5 +22,7 @@ public interface IShoppingCartDAO {
 	public List<Product> getListProduct(Integer idUSer );
 	
 	public List<Product> getListProductSale(String saleCode) ;
+	
+	public ShoppingCart getShoppingCartById(Integer id);
 }
 

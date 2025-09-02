@@ -1,6 +1,7 @@
 package com.springmvc.webfruit.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,77 +9,137 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.springmvc.webfruit.dao.impl.IShoppingCartDAO;
-import com.springmvc.webfruit.dao.impl.IUserDAO;
+import com.springmvc.webfruit.entity.CartItem;
 import com.springmvc.webfruit.entity.ShoppingCart;
 import com.springmvc.webfruit.entity.User;
+import com.springmvc.webfruit.service.impl.ICartItemService;
 import com.springmvc.webfruit.service.impl.IShoppingCartService;
-import com.springmvc.webfruit.service.impl.IUserService;
 
 @Controller
-@SessionAttributes("idUser")
 @RequestMapping("/cart")
 public class CartController {
 
 	@Autowired
-	IShoppingCartService shoppingCartService;
-
-	@Autowired
-	IShoppingCartDAO shoppingCartDAO;
-
-	@Autowired
-	IUserService userService;
-
-	@Autowired
-	IUserDAO userDAO;
+	private ICartItemService cartItemService;
 	
-	@GetMapping("/myCart")
-	public String addCart2(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		Integer id = (Integer) session.getAttribute("idUser");
-		if (id == null) {
-			return "login";
-		} else {
-			return "redirect:/myCart";
+	@Autowired
+	private IShoppingCartService shoppingCartService;
 
-		}
-
-	}
-
-	@GetMapping("/{id}")
-	public String addCart(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		Integer id = (Integer) session.getAttribute("idUser");
-		if (id == null) {
-			return "login";
-		} else {
-			return "redirect:/myCart";
-
-		}
-
-	}
-
-	@RequestMapping(value = "/doLogin", method = RequestMethod.POST)
-	public String loginError(Model model, @RequestParam("username") String userName,
-			@RequestParam("password") String passWord) {
-		boolean check = userDAO.checkExist(userName, passWord);
-		if (check) {
-			Integer idU = userDAO.searchByUserName(userName).getId();
-			model.addAttribute("idUser", idU);
-			ShoppingCart shoppingCart = new ShoppingCart();
-			User user = new User();
-			shoppingCart.setUser(user = userDAO.searchByUserName(userName));
-			shoppingCartService.save(shoppingCart);
-			return "redirect:/myCart";
-		} else if (check == false) {
+	@GetMapping("/view")
+	public String viewCart(Model model, HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
 			return "redirect:/login";
 		}
-		return "redirect:/login";
+		
+		ShoppingCart cart = shoppingCartService.getShoppingCartByUserId(user.getId());
+		if (cart != null) {
+			List<CartItem> cartItems = cartItemService.getCartItemsByShoppingCartId(cart.getId());
+			
+			// Calculate totals manually to avoid LazyInitializationException
+			Double total = 0.0;
+			Integer totalItems = 0;
+			for (CartItem item : cartItems) {
+				total += item.getSubtotal();
+				totalItems += item.getQuantity();
+			}
+			
+			model.addAttribute("cartItems", cartItems);
+			model.addAttribute("cart", cart);
+			model.addAttribute("total", total);
+			model.addAttribute("totalItems", totalItems);
+		} else {
+			model.addAttribute("total", 0.0);
+			model.addAttribute("totalItems", 0);
+		}
+		
+		return "shoppingCart";
+	}
+	
+	@GetMapping("/{id}")
+	public String viewCartById(@PathVariable("id") Integer id, Model model, HttpSession session) {
+		// Redirect to login if not authenticated
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			return "redirect:/login";
+		}
+		
+		// Redirect to cart view
+		return "redirect:/cart/view";
+	}
 
+	@PostMapping("/add")
+	@ResponseBody
+	public String addToCart(@RequestParam("productId") Integer productId,
+						   @RequestParam("quantity") Integer quantity,
+						   HttpSession session) {
+		try {
+			User user = (User) session.getAttribute("user");
+			if (user == null) {
+				return "{\"success\": false, \"message\": \"Please login first\"}";
+			}
+			
+			ShoppingCart cart = shoppingCartService.getShoppingCartByUserId(user.getId());
+			if (cart == null) {
+				// Create new shopping cart for user
+				cart = new ShoppingCart();
+				cart.setUser(user);
+				shoppingCartService.save(cart);
+			}
+			
+			cartItemService.addToCart(productId, cart.getId(), quantity);
+			
+			return "{\"success\": true, \"message\": \"Product added to cart successfully\"}";
+		} catch (Exception e) {
+			return "{\"success\": false, \"message\": \"Error adding product to cart\"}";
+		}
+	}
+
+	@PostMapping("/update")
+	@ResponseBody
+	public String updateQuantity(@RequestParam("cartItemId") Integer cartItemId,
+								@RequestParam("quantity") Integer quantity) {
+		try {
+			cartItemService.updateQuantity(cartItemId, quantity);
+			return "{\"success\": true, \"message\": \"Quantity updated successfully\"}";
+		} catch (Exception e) {
+			return "{\"success\": false, \"message\": \"Error updating quantity\"}";
+		}
+	}
+
+	@PostMapping("/remove")
+	@ResponseBody
+	public String removeFromCart(@RequestParam("cartItemId") Integer cartItemId) {
+		try {
+			cartItemService.deleteCartItem(cartItemId);
+			return "{\"success\": true, \"message\": \"Product removed from cart\"}";
+		} catch (Exception e) {
+			return "{\"success\": false, \"message\": \"Error removing product\"}";
+		}
+	}
+
+	@PostMapping("/clear")
+	@ResponseBody
+	public String clearCart(HttpSession session) {
+		try {
+			User user = (User) session.getAttribute("user");
+			if (user == null) {
+				return "{\"success\": false, \"message\": \"Please login first\"}";
+			}
+			
+			ShoppingCart cart = shoppingCartService.getShoppingCartByUserId(user.getId());
+			if (cart != null) {
+				cartItemService.deleteAllCartItems(cart.getId());
+			}
+			
+			return "{\"success\": true, \"message\": \"Cart cleared successfully\"}";
+		} catch (Exception e) {
+			return "{\"success\": false, \"message\": \"Error clearing cart\"}";
+		}
 	}
 }

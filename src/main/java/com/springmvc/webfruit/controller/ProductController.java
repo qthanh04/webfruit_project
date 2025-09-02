@@ -20,13 +20,7 @@ public class ProductController {
 	@Autowired
 	private IProductService productService;
 
-	@RequestMapping(value = "/")
-	public String home(Locale locale, Model model) {
-		List<Product> list = productService.getList();
-		model.addAttribute("product", list);
-		return "index";
 
-	}
 	
 	@RequestMapping(value = "/shop")
 	public String shop(Locale locale, Model model) {

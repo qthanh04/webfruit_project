@@ -2,126 +2,148 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-  
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login V4</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/png" href="resources/images/icons/favicon.ico"/>
+<title>Login - Vegefoods</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/bootstrap/css/bootstrap.min.css">
+<link
+	href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
+	rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap"
+	rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap"
+	rel="stylesheet">
 
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="resources/css/open-iconic-bootstrap.min.css">
+<link rel="stylesheet" href="resources/css/animate.css">
+<link rel="stylesheet" href="resources/css/owl.carousel.min.css">
+<link rel="stylesheet" href="resources/css/owl.theme.default.min.css">
+<link rel="stylesheet" href="resources/css/magnific-popup.css">
+<link rel="stylesheet" href="resources/css/aos.css">
+<link rel="stylesheet" href="resources/css/ionicons.min.css">
+<link rel="stylesheet" href="resources/css/bootstrap-datepicker.css">
+<link rel="stylesheet" href="resources/css/jquery.timepicker.css">
+<link rel="stylesheet" href="resources/css/flaticon.css">
+<link rel="stylesheet" href="resources/css/icomoon.css">
+<link rel="stylesheet" href="resources/css/style.css">
 
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/fonts/iconic/css/material-design-iconic-font.min.css">
+<style>
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
 
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/animate/animate.css">
+.login-form {
+    background: white;
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
 
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/css-hamburgers/hamburgers.min.css">
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
 
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/animsition/css/animsition.min.css">
+.form-group {
+    margin-bottom: 20px;
+}
 
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/select2/select2.min.css">
+.form-control {
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    font-size: 16px;
+}
 
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/daterangepicker/daterangepicker.css">
+.form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
 
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/util.css">
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/main.css">
+.btn-login {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 16px;
+    width: 100%;
+    transition: all 0.3s;
+}
 
+.btn-login:hover {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+.alert {
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.back-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.back-link a {
+    color: #28a745;
+    text-decoration: none;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
+</style>
 </head>
 <body>
-	
-	<div class="limiter">
-		<div class="container-login100" style="background-image: url('${pageContext.request.contextPath}/resources/images/bg-01.jpg');">
-			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-				<form class="login100-form validate-form" action="doLogin" method="post">
-					 
-					
-
-					<div class="wrap-input100 validate-input m-b-23" data-validate = "Username is reauired">
-						<span class="label-input100">Username</span>
-						<input class="input100" type="text" name="username" placeholder="Type your username" >
-						<span class="focus-input100" data-symbol="&#xf206;"></span>
-					</div>
-
-					<div class="wrap-input100 validate-input" data-validate="Password is required">
-						<span class="label-input100">Password</span>
-						<input class="input100" type="password" name="password" placeholder="Type your password">
-						<span class="focus-input100" data-symbol="&#xf190;"></span>
-					</div>
-					
-					
-					
-					<div class="text-right p-t-8 p-b-31">
-						<a href="#">
-							Forgot password?
-						</a>
-					</div>
-					
-					<div class="container-login100-form-btn">
-						<div class="wrap-login100-form-btn">
-							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn">
-								<input type="submit" value="">LOGIN
-							</button>
-						</div>
-					</div>
-
-					<div class="txt1 text-center p-t-54 p-b-20">
-						<span>
-							Or Sign Up Using
-						</span>
-					</div>
-
-					<div class="flex-c-m">
-						<a href="#" class="login100-social-item bg1">
-							<i class="fa fa-facebook"></i>
-						</a>
-
-						<a href="#" class="login100-social-item bg2">
-							<i class="fa fa-twitter"></i>
-						</a>
-
-						<a href="#" class="login100-social-item bg3">
-							<i class="fa fa-google"></i>
-						</a>
-					</div>
-
-					<div class="flex-col-c p-t-155">
-						<span class="txt1 p-b-17">
-							Or Sign Up Using
-						</span>
-
-						<a href="#" class="txt2">
-							Sign Up
-						</a>
-					</div>
-				</form>
+	<div class="login-container">
+		<div class="login-form">
+			<h2>Login to Vegefoods</h2>
+			
+			<c:if test="${not empty error}">
+				<div class="alert alert-danger" role="alert">
+					${error}
+				</div>
+			</c:if>
+			
+			<form action="${pageContext.request.contextPath}/login" method="post">
+				<div class="form-group">
+					<label for="username">Username</label>
+					<input type="text" class="form-control" id="username" name="username" required>
+				</div>
+				
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input type="password" class="form-control" id="password" name="password" required>
+				</div>
+				
+				<button type="submit" class="btn btn-login">Login</button>
+			</form>
+			
+			<div class="back-link">
+				<a href="${pageContext.request.contextPath}/">← Back to Home</a>
 			</div>
 		</div>
 	</div>
-	
 
-	<div id="dropDownSelect1"></div>
-	
-
-	<script src="${pageContext.request.contextPath}/resources/vendor/jquery/jquery-3.2.1.min.js"></script>
-
-	<script src="${pageContext.request.contextPath}/resources/vendor/animsition/js/animsition.min.js"></script>
-
-	<script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/popper.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/bootstrap.min.js"></script>
-
-	<script src="${pageContext.request.contextPath}/resources/vendor/select2/select2.min.js"></script>
-
-	<script src="${pageContext.request.contextPath}/resources/vendor/daterangepicker/moment.min.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/vendor/daterangepicker/daterangepicker.js"></script>
-
-	<script src="${pageContext.request.contextPath}/resources/vendor/countdowntime/countdowntime.js"></script>
-
-	<script src="${pageContext.request.contextPath}/resources/js/main2.js"></script>
-
+	<script src="resources/js/jquery.min.js"></script>
+	<script src="resources/js/popper.min.js"></script>
+	<script src="resources/js/bootstrap.min.js"></script>
 </body>
 </html>

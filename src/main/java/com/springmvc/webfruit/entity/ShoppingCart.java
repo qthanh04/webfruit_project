@@ -24,10 +24,8 @@ public class ShoppingCart {
 	  private User user ;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "shoppingCart")
-	  private Set<Product> listProduct = new HashSet<Product>();
+	  private Set<CartItem> cartItems = new HashSet<CartItem>();
 	
-	
-
 	public Integer getId() {
 		return id;
 	}
@@ -44,16 +42,27 @@ public class ShoppingCart {
 		this.user = user;
 	}
 
-	public Set<Product> getListProduct() {
-		return listProduct;
+	public Set<CartItem> getCartItems() {
+		return cartItems;
 	}
 
-	public void setListProduct(Set<Product> listProduct) {
-		this.listProduct = listProduct;
+	public void setCartItems(Set<CartItem> cartItems) {
+		this.cartItems = cartItems;
 	}
-
-
 	
+	public Double getTotal() {
+		Double total = 0.0;
+		for (CartItem item : cartItems) {
+			total += item.getSubtotal();
+		}
+		return total;
+	}
 	
-
+	public Integer getTotalItems() {
+		Integer total = 0;
+		for (CartItem item : cartItems) {
+			total += item.getQuantity();
+		}
+		return total;
+	}
 }

@@ -65,5 +65,16 @@ public class ShoppingCartService implements IShoppingCartService {
 		}
 		return listProductSale;
 	}
+	
+	@Override
+	public ShoppingCart getShoppingCartByUserId(Integer userId) {
+		List<ShoppingCart> carts = shoppingCartDAO.getList();
+		for (ShoppingCart cart : carts) {
+			if (cart.getUser() != null && cart.getUser().getId().equals(userId)) {
+				return cart;
+			}
+		}
+		return null;
+	}
 
 }
