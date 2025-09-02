@@ -53,6 +53,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# SmartTomcat
+.smarttomcat/
+
 # VS Code
 .vscode/
 *.code-workspace
