@@ -30,6 +30,9 @@
 ## ✨ Tính Năng Chính
 
 ### 🛒 **Hệ Thống Giỏ Hàng Thông Minh**
+<img src="https://github.com/user-attachments/assets/d75e3ab7-83a0-4627-989c-8c0e1903fd07" alt="ảnh" style="max-width: 600px; height: auto; border-radius: 8px;" />
+<img src="https://github.com/user-attachments/assets/0495de89-3f0a-41ef-8ad3-01a95c1a139d" alt="ảnh" style="max-width: 600px; height: auto; border-radius: 8px;" />
+
 - **Thêm sản phẩm**: Click vào icon 🛒 trên mỗi sản phẩm
 - **Quản lý số lượng**: Tăng/giảm số lượng với nút +/- 
 - **Xóa sản phẩm**: Xóa từng sản phẩm hoặc xóa toàn bộ giỏ hàng
@@ -37,6 +40,8 @@
 - **Lưu trữ session**: Giỏ hàng được lưu trữ theo từng người dùng
 
 ### 💳 **Hệ Thống Thanh Toán**
+<img src="https://github.com/user-attachments/assets/edb7e0dc-5de0-4428-983d-2e711217afdc" alt="ảnh" style="max-width: 600px; height: auto; border-radius: 8px;" />
+
 - **Form thanh toán**: Giao diện nhập thông tin giao hàng
 - **Phương thức thanh toán**: Credit Card, PayPal, Tiền mặt khi nhận hàng
 - **Xác nhận đơn hàng**: Hiển thị tổng quan trước khi đặt hàng
